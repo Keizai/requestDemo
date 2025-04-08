@@ -37,7 +37,7 @@ class VerificationCodeService {
         // Prepare headers
         let headers: [String: String] = [
             "packageName": alias,
-            "headName": tokenAESString
+            headName: tokenAESString
         ]
         
         print("Parameters before encryption:", parameters)
@@ -157,10 +157,15 @@ class VerificationCodeService {
     }
     
     private func dictionaryToJson(dictionary: [String: Any]) -> String? {
-        guard let data = try? JSONSerialization.data(withJSONObject: dictionary) else {
-            return nil
-        }
-        return String(data: data, encoding: .utf8)
+        let sortedKeys = dictionary.keys.sorted()
+            var sortedDict = [String: Any]()
+            for key in sortedKeys {
+                sortedDict[key] = dictionary[key]
+            }
+            guard let data = try? JSONSerialization.data(withJSONObject: sortedDict, options: []) else {
+                return nil
+            }
+            return String(data: data, encoding: .utf8)
     }
 }
 
